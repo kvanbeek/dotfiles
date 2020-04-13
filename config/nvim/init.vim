@@ -191,7 +191,10 @@ call plug#begin('~/.config/nvim/plugged')
     " helpers for dealing with other people's code
     nmap \t :set ts=4 sts=4 sw=4 noet<cr>
     nmap \s :set ts=4 sts=4 sw=4 et<cr>
+"}}}
 
+
+" General Functionality {{{
     " NERDTree {{{
         Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
         Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -281,6 +284,47 @@ call plug#begin('~/.config/nvim/plugged')
         Plug 'airblade/vim-gitgutter'
     " }}}
 
+" Language-Specific Configuration {{{
+    " JavaScript {{{
+        Plug 'othree/yajs.vim', { 'for': [ 'javascript', 'javascript.jsx', 'html' ] }
+        " Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx', 'html'] }
+        Plug 'moll/vim-node', { 'for': 'javascript' }
+		Plug 'ternjs/tern_for_vim', { 'for': ['javascript', 'javascript.jsx'], 'do': 'npm install' }
+		Plug 'MaxMEllon/vim-jsx-pretty'
+		let g:vim_jsx_pretty_highlight_close_tag = 1
+    " }}}
+
+    " TypeScript {{{
+        Plug 'leafgarland/typescript-vim', { 'for': ['typescript', 'typescript.tsx'] }
+        " Plug 'Shougo/vimproc.vim', { 'do': 'make' } TODO what still needs this?
+    " }}}
+
+    " Styles {{{
+        Plug 'wavded/vim-stylus', { 'for': ['stylus', 'markdown'] }
+        Plug 'groenewege/vim-less', { 'for': 'less' }
+        Plug 'hail2u/vim-css3-syntax', { 'for': 'css' }
+        Plug 'cakebaker/scss-syntax.vim', { 'for': 'scss' }
+        Plug 'stephenway/postcss.vim', { 'for': 'css' }
+    " }}}
+
+    " markdown {{{
+        Plug 'tpope/vim-markdown', { 'for': 'markdown' }
+        let g:markdown_fenced_languages = [ 'tsx=typescript.tsx' ]
+
+        " Open markdown files in Marked.app - mapped to <leader>m
+        Plug 'itspriddle/vim-marked', { 'for': 'markdown', 'on': 'MarkedOpen' }
+        nmap <leader>m :MarkedOpen!<cr>
+        nmap <leader>mq :MarkedQuit<cr>
+        nmap <leader>* *<c-o>:%s///gn<cr>
+    " }}}
+
+    " JSON {{{
+        Plug 'elzr/vim-json', { 'for': 'json' }
+        let g:vim_json_syntax_conceal = 0
+    " }}}
+
+    Plug 'ekalinin/Dockerfile.vim'
+" }}}
 		
 " Initialize plugin system
 call plug#end()
