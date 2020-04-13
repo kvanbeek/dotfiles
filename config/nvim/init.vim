@@ -178,6 +178,16 @@ call plug#begin('~/.config/nvim/plugged')
     nnoremap <silent> ^ g^
     nnoremap <silent> $ g$
 
+    " Custom text objects
+
+    " inner-line
+    " xnoremap <silent> il :<c-u>normal! g_v^<cr>
+    " onoremap <silent> il :<c-u>normal! g_v^<cr>
+
+    " around line
+    " vnoremap <silent> al :<c-u>normal! $v0<cr>
+    " onoremap <silent> al :<c-u>normal! $v0<cr>
+
     " helpers for dealing with other people's code
     nmap \t :set ts=4 sts=4 sw=4 noet<cr>
     nmap \s :set ts=4 sts=4 sw=4 et<cr>
