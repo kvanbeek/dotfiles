@@ -26,6 +26,11 @@ if [ "$(uname)" == "Darwin" ]; then
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
     fi
 
+    # After the install, setup fzf
+    echo -e "\\n\\nRunning fzf install script..."
+    echo "=============================="
+    /usr/local/opt/fzf/install --all --no-bash --no-fish
+
     echo -e "\\n\\ninstalling to ~/.config"
     echo "=============================="
     if [ ! -d "$HOME/.config" ]; then
@@ -40,7 +45,7 @@ if [ "$(uname)" == "Darwin" ]; then
             echo "~${target#$HOME} already exists... Skipping."
         else
             echo "Creating symlink for $config ~${target#$HOME}"
-            # ln -s "$config" "$target"
+            ln -s "$config" "$target"
         fi
     done
 
@@ -52,15 +57,30 @@ if [ "$(uname)" == "Darwin" ]; then
     for file in "${VIMFILES[@]}"; do
         KEY=${file%%:*}
         VALUE=${file#*:}
-        echo "Value ${VALUE} Key ${KEY}"
+        if [ -e "${KEY}" ]; then
+            echo "${KEY} already exists... skipping."
+        else
+            echo "Creating symlink for $KEY"
+            ln -s "${VALUE}" "${KEY}"
+        fi
     done
-
 
     # # After the install, setup fzf
     # echo -e "\\n\\nRunning fzf install script..."
     # echo "=============================="
     # /usr/local/opt/fzf/install --all --no-bash --no-fish
 fi
+
+# Add base16
+if [ ! -d "$HOME/.config/base16-shell" ]; then
+    echo "Creating ~/.config/base16-shell"
+    git clone https://github.com/chriskempson/base16-shell.git ~/.config/base16-shell
+    echo 'BASE16_SHELL="$HOME/.config/base16-shell/"
+            [ -n "$PS1" ] && \
+                [ -s "$BASE16_SHELL/profile_helper.sh" ] && \
+                    eval "$("$BASE16_SHELL/profile_helper.sh")"
+    ' >> ~/.zshrc
+fi 
 
 # echo "creating vim directories"
 # mkdir -p ~/.vim-tmp

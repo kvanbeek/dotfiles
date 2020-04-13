@@ -10,3 +10,7 @@ brew "python"
 brew "neovim"
 brew "vim"
 brew "zsh"
+brew "fzf"
+
+# applications
+cask "iterm2"
