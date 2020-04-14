@@ -15,6 +15,8 @@ call plug#begin('~/.config/nvim/plugged')
     abbr attribtue attribute
     abbr attribuet attribute
 
+    set encoding=UTF-8
+
     set autoread " detect when a file is changed
 
     set history=1000 " change history to 1000
@@ -79,9 +81,9 @@ call plug#begin('~/.config/nvim/plugged')
 
     " Tab control
     set smarttab " tab respects 'tabstop', 'shiftwidth', and 'softtabstop'
-    set tabstop=4 " the visible width of tabs
-    set softtabstop=4 " edit as if the tabs are 4 characters wide
-    set shiftwidth=4 " number of spaces to use for indent and unindent
+    set tabstop=2 " the visible width of tabs
+    set softtabstop=2 " edit as if the tabs are 4 characters wide
+    set shiftwidth=2 " number of spaces to use for indent and unindent
     set shiftround " round indent to a multiple of 'shiftwidth'
 
     " code folding settings
@@ -123,8 +125,51 @@ call plug#begin('~/.config/nvim/plugged')
     Plug 'chriskempson/base16-vim'
     Plug 'joshdick/onedark.vim'
 
+    " LightLine {{{
+        Plug 'itchyny/lightline.vim'
+        Plug 'nicknisi/vim-base16-lightline'
+        let g:lightline = {
+            \   'colorscheme': 'base16',
+            \   'active': {
+            \       'left': [ [ 'mode', 'paste' ],
+            \               [ 'gitbranch' ],
+            \               [ 'readonly', 'filetype', 'filename' ]],
+            \       'right': [ [ 'percent' ], [ 'lineinfo' ],
+            \               [ 'fileformat', 'fileencoding' ],
+            \               [ 'gitblame', 'currentfunction',  'cocstatus', 'linter_errors', 'linter_warnings' ]]
+            \   },
+            \   'component_expand': {
+            \   },
+            \   'component_type': {
+            \       'readonly': 'error',
+            \       'linter_warnings': 'warning',
+            \       'linter_errors': 'error'
+            \   },
+            \   'component_function': {
+            \       'fileencoding': 'helpers#lightline#fileEncoding',
+            \       'filename': 'helpers#lightline#fileName',
+            \       'fileformat': 'helpers#lightline#fileFormat',
+            \       'filetype': 'helpers#lightline#fileType',
+            \       'gitbranch': 'helpers#lightline#gitBranch',
+            \       'cocstatus': 'coc#status',
+            \       'currentfunction': 'helpers#lightline#currentFunction',
+            \       'gitblame': 'helpers#lightline#gitBlame'
+            \   },
+            \   'tabline': {
+            \       'left': [ [ 'tabs' ] ],
+            \       'right': [ [ 'close' ] ]
+            \   },
+            \   'tab': {
+            \       'active': [ 'filename', 'modified' ],
+            \       'inactive': [ 'filename', 'modified' ],
+            \   },
+            \   'separator': { 'left': '', 'right': '' },
+            \   'subseparator': { 'left': '', 'right': '' }
+        \ }
+    " }}}
+" }}}
 
-	" General Mappings {{{
+" General Mappings {{{
     " set a map leader for more key combos
     let mapleader = ' '
 
@@ -162,9 +207,10 @@ call plug#begin('~/.config/nvim/plugged')
     map <silent> <C-j> <Plug>WinMoveDown
     map <silent> <C-k> <Plug>WinMoveUp
     map <silent> <C-l> <Plug>WinMoveRight
-
     map <leader>wc :wincmd q<cr>
 
+    " Zoom into a pane
+    nmap <leader>z <Plug>Zoom
     " toggle cursor line
     nnoremap <leader>i :set cursorline!<cr>
 
@@ -188,13 +234,76 @@ call plug#begin('~/.config/nvim/plugged')
     " vnoremap <silent> al :<c-u>normal! $v0<cr>
     " onoremap <silent> al :<c-u>normal! $v0<cr>
 
+    " Interesting word mappings
+    nmap <leader>0 <Plug>ClearInterestingWord
+    nmap <leader>1 <Plug>HiInterestingWord1
+    nmap <leader>2 <Plug>HiInterestingWord2
+    nmap <leader>3 <Plug>HiInterestingWord3
+    nmap <leader>4 <Plug>HiInterestingWord4
+    nmap <leader>5 <Plug>HiInterestingWord5
+    nmap <leader>6 <Plug>HiInterestingWord6
+
     " helpers for dealing with other people's code
     nmap \t :set ts=4 sts=4 sw=4 noet<cr>
     nmap \s :set ts=4 sts=4 sw=4 et<cr>
 "}}}
 
-
 " General Functionality {{{
+    " Enable autoclosing brackets and parenthesis
+    Plug 'jiangmiao/auto-pairs'
+
+    " single/multi line code handler: gS - split one line into multiple, gJ - combine multiple lines into one
+    Plug 'AndrewRadev/splitjoin.vim'
+
+    " detect indent style (tabs vs. spaces)
+    Plug 'tpope/vim-sleuth'
+
+    " enables repeating other supported plugins with the . command
+    Plug 'tpope/vim-repeat'
+
+    " .editorconfig support
+    Plug 'editorconfig/editorconfig-vim'
+
+    " easy commenting motions
+    Plug 'tpope/vim-commentary'
+    
+    " context-aware pasting
+    Plug 'sickill/vim-pasta'
+
+    " Startify: Fancy startup screen for vim {{{
+        Plug 'mhinz/vim-startify'
+
+        " Don't change to directory when selecting a file
+        let g:startify_files_number = 5
+        let g:startify_change_to_dir = 0
+        let g:startify_custom_header = [ ]
+        let g:startify_relative_path = 1
+        let g:startify_use_env = 1
+
+        " Custom startup list, only show MRU from current directory/project
+        let g:startify_lists = [
+        \  { 'type': 'dir',       'header': [ 'Files '. getcwd() ] },
+        \  { 'type': function('helpers#startify#listcommits'), 'header': [ 'Recent Commits' ] },
+        \  { 'type': 'sessions',  'header': [ 'Sessions' ]       },
+        \  { 'type': 'bookmarks', 'header': [ 'Bookmarks' ]      },
+        \  { 'type': 'commands',  'header': [ 'Commands' ]       },
+        \ ]
+
+        let g:startify_commands = [
+        \   { 'up': [ 'Update Plugins', ':PlugUpdate' ] },
+        \   { 'ug': [ 'Upgrade Plugin Manager', ':PlugUpgrade' ] },
+        \ ]
+
+        let g:startify_bookmarks = [
+            \ { 'c': '~/.config/nvim/init.vim' },
+            \ { 'g': '~/.gitconfig' },
+            \ { 'z': '~/.zshrc' }
+        \ ]
+
+        autocmd User Startified setlocal cursorline
+        nmap <leader>st :Startify<cr>
+    " }}}
+
     " NERDTree {{{
         Plug 'scrooloose/nerdtree', { 'on': ['NERDTreeToggle', 'NERDTreeFind'] }
         Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -280,18 +389,97 @@ call plug#begin('~/.config/nvim/plugged')
         nmap <silent><leader>gb :Gblame<cr>
     " }}}
 
-	" vim-fugitive {{{
+    " vim-gitgutter {{{
         Plug 'airblade/vim-gitgutter'
     " }}}
 
+    " coc {{{
+        Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
+
+        let g:coc_global_extensions = [
+        \ 'coc-css',
+        \ 'coc-json',
+        \ 'coc-tsserver',
+        \ 'coc-git',
+        \ 'coc-eslint',
+        \ 'coc-tslint-plugin',
+        \ 'coc-pairs',
+        \ 'coc-sh',
+        \ 'coc-vimlsp',
+        \ 'coc-emmet',
+        \ 'coc-prettier',
+        \ 'coc-ultisnips',
+        \ 'coc-explorer',
+        \ 'coc-diagnostic'
+        \ ]
+
+        autocmd CursorHold * silent call CocActionAsync('highlight')
+
+        "" coc-prettier
+        command! -nargs=0 Prettier :CocCommand prettier.formatFile
+        nmap <leader>p :CocCommand prettier.formatFile<cr>
+
+        "" coc-git
+        nmap [g <Plug>(coc-git-prevchunk)
+        nmap ]g <Plug>(coc-git-nextchunk)
+        nmap gs <Plug>(coc-git-chunkinfo)
+        nmap gu :CocCommand git.chunkUndo<cr>
+
+        nmap <silent> <leader>k :CocCommand explorer<cr>
+
+        ""remap keys for gotos
+        nmap <silent> gd <Plug>(coc-definition)
+        nmap <silent> gy <Plug>(coc-type-definition)
+        nmap <silent> gi <Plug>(coc-implementation)
+        nmap <silent> gr <Plug>(coc-references)
+        nmap <silent> gh <Plug>(coc-doHover)
+
+        "" diagnostics navigation
+        "nmap <silent> [c <Plug>(coc-diagnostic-prev)
+        "nmap <silent> ]c <Plug>(coc-diagnostic-next)
+
+        "" rename
+        "nmap <silent> <leader>rn <Plug>(coc-rename)
+
+        "" Remap for format selected region
+        xmap <leader>f  <Plug>(coc-format-selected)
+        nmap <leader>f  <Plug>(coc-format-selected)
+
+        "" organize imports
+        "command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
+
+        "" Use K to show documentation in preview window
+        "nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+        "function! s:show_documentation()
+        "    if (index(['vim','help'], &filetype) >= 0)
+        "        execute 'h '.expand('<cword>')
+        "    else
+        "        call CocAction('doHover')
+        "    endif
+        "endfunction
+
+        ""tab completion
+        inoremap <silent><expr> <TAB>
+            \ pumvisible() ? "\<C-n>" :
+            \ <SID>check_back_space() ? "\<TAB>" :
+            \ coc#refresh()
+        inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+        function! s:check_back_space() abort
+        let col = col('.') - 1
+        return !col || getline('.')[col - 1]  =~# '\s'
+        endfunction
+    " }}}
+" }}}
 " Language-Specific Configuration {{{
     " JavaScript {{{
         Plug 'othree/yajs.vim', { 'for': [ 'javascript', 'javascript.jsx', 'html' ] }
         " Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx', 'html'] }
         Plug 'moll/vim-node', { 'for': 'javascript' }
-		Plug 'ternjs/tern_for_vim', { 'for': ['javascript', 'javascript.jsx'], 'do': 'npm install' }
-		Plug 'MaxMEllon/vim-jsx-pretty'
-		let g:vim_jsx_pretty_highlight_close_tag = 1
+				Plug 'ternjs/tern_for_vim', { 'for': ['javascript', 'javascript.jsx'], 'do': 'npm install' }
+				Plug 'MaxMEllon/vim-jsx-pretty'
+				let g:vim_jsx_pretty_highlight_close_tag = 1
     " }}}
 
     " TypeScript {{{

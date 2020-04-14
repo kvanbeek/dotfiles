@@ -14,3 +14,7 @@ brew "fzf"
 
 # applications
 cask "iterm2"
+
+# Fonts
+cask "font-fira-code"
+cask "font-hack-nerd-font"
