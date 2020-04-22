@@ -173,7 +173,10 @@ call plug#begin('~/.config/nvim/plugged')
     " set a map leader for more key combos
     let mapleader = ' '
 
-	" remap esc
+    " set relative numbers for editor
+    set relativenumber 
+    
+    " remap esc
     inoremap jk <esc>
 
     " shortcut to save
@@ -209,6 +212,17 @@ call plug#begin('~/.config/nvim/plugged')
     map <silent> <C-l> <Plug>WinMoveRight
     map <leader>wc :wincmd q<cr>
 
+    " In insert or command mode, move normally by using Ctrl
+    " TODO: these do not seem to work as expected
+    inoremap <C-h> <Left>
+    inoremap <C-j> <Down>
+    inoremap <C-k> <Up>
+    inoremap <C-l> <Right>
+    cnoremap <C-h> <Left>
+    cnoremap <C-j> <Down>
+    cnoremap <C-k> <Up>
+    cnoremap <C-l> <Right>
+
     " Zoom into a pane
     nmap <leader>z <Plug>Zoom
     " toggle cursor line
@@ -227,12 +241,12 @@ call plug#begin('~/.config/nvim/plugged')
     " Custom text objects
 
     " inner-line
-    " xnoremap <silent> il :<c-u>normal! g_v^<cr>
-    " onoremap <silent> il :<c-u>normal! g_v^<cr>
+    xnoremap <silent> il :<c-u>normal! g_v^<cr>
+    onoremap <silent> il :<c-u>normal! g_v^<cr>
 
     " around line
-    " vnoremap <silent> al :<c-u>normal! $v0<cr>
-    " onoremap <silent> al :<c-u>normal! $v0<cr>
+    vnoremap <silent> al :<c-u>normal! $v0<cr>
+    onoremap <silent> al :<c-u>normal! $v0<cr>
 
     " Interesting word mappings
     nmap <leader>0 <Plug>ClearInterestingWord
@@ -266,7 +280,37 @@ call plug#begin('~/.config/nvim/plugged')
 
     " easy commenting motions
     Plug 'tpope/vim-commentary'
+
+    " surround update delete or change  
+    Plug 'tpope/vim-surround'
+
+
+    " tmux integration for vim
+    Plug 'benmills/vimux'
+    nmap <leader>ra :VimuxRunCommand('yarn run android')<cr>
+    nmap <leader>ri :VimuxRunCommand('yarn run ios')<cr>
     
+    " EasyMotion    
+    Plug 'easymotion/vim-easymotion'
+    
+    " <Leader>f{char} to move to {char}
+    " map  <Leader>c <Plug>(easymotion-bd-f)
+    " nmap <Leader>c <Plug>(easymotion-overwin-f)
+
+    " s{char}{char} to move to {char}{char}
+    nmap s <Plug>(easymotion-overwin-f2)
+
+    " Move to line
+    map <Leader>L <Plug>(easymotion-bd-jk)
+    nmap <Leader>L <Plug>(easymotion-overwin-line)
+
+    " Move to word
+    map  <Leader>w <Plug>(easymotion-bd-w)
+    nmap <Leader>w <Plug>(easymotion-overwin-w)
+
+    " select multiple lines
+    Plug 'terryma/vim-multiple-cursors'
+
     " context-aware pasting
     Plug 'sickill/vim-pasta'
 
@@ -393,6 +437,15 @@ call plug#begin('~/.config/nvim/plugged')
         Plug 'airblade/vim-gitgutter'
     " }}}
 
+    " UltiSnips {{{
+        Plug 'SirVer/ultisnips' " Snippets plugin
+        Plug 'honza/vim-snippets'
+
+        let g:UltiSnipsExpandTrigger="<C-l>"
+        let g:UltiSnipsJumpForwardTrigger="<C-j>"
+        let g:UltiSnipsJumpBackwardTrigger="<C-k>"
+    " }}}
+  
     " coc {{{
         Plug 'neoclide/coc.nvim', {'do': 'yarn install --frozen-lockfile'}
 
@@ -416,8 +469,8 @@ call plug#begin('~/.config/nvim/plugged')
         autocmd CursorHold * silent call CocActionAsync('highlight')
 
         "" coc-prettier
-        command! -nargs=0 Prettier :CocCommand prettier.formatFile
-        nmap <leader>p :CocCommand prettier.formatFile<cr>
+        " command! -nargs=0 Prettier :CocCommand prettier.formatFile
+        " nmap <leader>p :CocCommand prettier.formatFile<cr>
 
         "" coc-git
         nmap [g <Plug>(coc-git-prevchunk)
@@ -442,8 +495,8 @@ call plug#begin('~/.config/nvim/plugged')
         "nmap <silent> <leader>rn <Plug>(coc-rename)
 
         "" Remap for format selected region
-        xmap <leader>f  <Plug>(coc-format-selected)
-        nmap <leader>f  <Plug>(coc-format-selected)
+        " xmap <leader>f  <Plug>(coc-format-selected)
+        " nmap <leader>f  <Plug>(coc-format-selected)
 
         "" organize imports
         "command! -nargs=0 OR :call CocAction('runCommand', 'editor.action.organizeImport')
@@ -480,6 +533,12 @@ call plug#begin('~/.config/nvim/plugged')
 				Plug 'ternjs/tern_for_vim', { 'for': ['javascript', 'javascript.jsx'], 'do': 'npm install' }
 				Plug 'MaxMEllon/vim-jsx-pretty'
 				let g:vim_jsx_pretty_highlight_close_tag = 1
+                                
+        " console log insert
+        nnoremap <Leader>cl "ayiwoconsole.log('<C-R>a:', <C-R>a);<Esc>
+        " react return with function body
+        " TODO fix this and make it work properly
+        noremap <Leader>rf ca({return p%vi(>j>>A;<Esc>
     " }}}
 
     " TypeScript {{{
@@ -513,7 +572,7 @@ call plug#begin('~/.config/nvim/plugged')
 
     Plug 'ekalinin/Dockerfile.vim'
 " }}}
-		
+		 
 " Initialize plugin system
 call plug#end()
 

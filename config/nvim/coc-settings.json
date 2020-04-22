@@ -13,7 +13,6 @@
     "diagnostic.infoSign": "●",
     "diagnostic.hintSign": "○",
     "git.addGBlameToBufferVar": true,
-    "coc.preferences.formatOnSaveFiletypes": ["typescript", "javascript", "javascript.jsx", "typescript.tsx", "typescriptreact", "javascriptreact"],
     "explorer.icon.enableNerdfont": true,
     "explorer.sources": [
         {"name": "buffer", "expand": true},
@@ -31,7 +30,8 @@
     "explorer.keyMappings": {
         "<cr>": ["expandable?", "expandOrCollapse", "open"]
     },
-    "eslint.enable": false,
+    "eslint.enable": true,
+    "eslint.autoFixOnSave": true,
     "diagnostic-languageserver.filetypes": {
         "sh": "shellcheck"
     }

@@ -11,6 +11,8 @@ brew "neovim"
 brew "vim"
 brew "zsh"
 brew "fzf"
+brew "tmux"
+brew "ctags-exuberant"
 
 # applications
 cask "iterm2"
