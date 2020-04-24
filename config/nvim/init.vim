@@ -400,6 +400,7 @@ call plug#begin('~/.config/nvim/plugged')
     " FZF {{{
         Plug '/usr/local/opt/fzf'
         Plug 'junegunn/fzf.vim'
+        set tags=tags
 
         if isdirectory(".git")
             " if in a git project, use :GFiles
