@@ -18,6 +18,8 @@ call plug#begin('~/.config/nvim/plugged')
     set encoding=UTF-8
 
     set autoread " detect when a file is changed
+    au FocusGained,BufEnter * :silent! ! " when gaining focus reload files
+    " au FocusLost,WinLeave * :silent! noautocmd w " write the file as is when leaving vim but do not run linters
 
     set history=1000 " change history to 1000
     set textwidth=120
@@ -229,8 +231,8 @@ call plug#begin('~/.config/nvim/plugged')
     nnoremap <leader>i :set cursorline!<cr>
 
     " scroll the viewport faster
-    nnoremap <C-e> 3<C-e>
-    nnoremap <C-y> 3<C-y>
+    nnoremap <C-e> 4<C-e>
+    nnoremap <C-y> 4<C-y>
 
     " moving up and down work as you would expect
     nnoremap <silent> j gj
@@ -542,6 +544,7 @@ call plug#begin('~/.config/nvim/plugged')
         noremap <Leader>rf ca({return p%vi(>j>>A;<Esc>
     " }}}
 
+    autocmd BufRead *.tsx set filetype=typescript.tsx
     " TypeScript {{{
         Plug 'leafgarland/typescript-vim', { 'for': ['typescript', 'typescript.tsx'] }
         " Plug 'Shougo/vimproc.vim', { 'do': 'make' } TODO what still needs this?
